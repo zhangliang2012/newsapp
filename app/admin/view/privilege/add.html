@@ -1,0 +1,104 @@
+{include file="layout/_meta" title="添加权限 - 管理员管理" keywords="网站后台模版" description="国人开发的轻量级扁平化网站后台模板"}
+<article class="page-container">
+	<form class="form form-horizontal" id="form-admin-add" >
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>权限名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="pri_name" name="pri_name">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>模块：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="module_name" name="module_name">
+		</div>
+	</div>
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>控制器：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="controller_name" name="controller_name">
+			</div>
+	</div>
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>方法：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="action_name" name="action_name">
+			</div>
+	</div>
+
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>上级权限：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+					<select name="parent_id" class="select valid" size="1">
+						<option>asdf</option>
+						<option>asdf</option>
+						<option>asdf</option>
+						<option>asdf</option>
+					</select>
+				</span>
+			</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+		</div>
+	</div>
+	</form>
+</article>
+
+{include file="layout/_footer"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/huiadmin/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/huiadmin/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/huiadmin/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	$("#form-admin-add").validate({
+		rules:{
+			title:{
+				required:true,
+				minlength:1,
+				maxlength:16
+			},
+			urls:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "/admin/privilege/add" ,
+				success: function(data){
+//				    console.log(data);
+					if(data.status == 6){//添加成功后关闭弹出层
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.$('.btn-refresh').click();
+                        parent.layer.close(index);
+					}
+                    layer.msg(data.mes,{icon:data.status,time:2000});
+				},
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+				    console.log(XmlHttpRequest.responseText);
+				    console.log(textStatus);
+				    console.log(errorThrown);
+					layer.msg('内部错误请联系管理员解决error!',{icon:5,time:2000});
+				}
+			});
+		}
+	});
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
